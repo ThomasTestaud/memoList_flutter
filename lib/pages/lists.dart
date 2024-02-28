@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/lists.dart';
 import './newList.dart';
+import './matches.dart'; // Import the Matches page
 
 class ListsPage extends StatefulWidget {
   const ListsPage({Key? key}) : super(key: key);
@@ -37,7 +38,6 @@ class _ListsPageState extends State<ListsPage> {
           lists.isEmpty
               ? Center(child: CircularProgressIndicator())
               : Expanded(
-                  // Wrap ListView.builder with Expanded
                   child: ListView.builder(
                     itemCount: lists.length,
                     itemBuilder: (context, index) {
@@ -54,7 +54,12 @@ class _ListsPageState extends State<ListsPage> {
                             ],
                           ),
                           onPressed: () {
-                            print(list.id);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MatchesPage(id: list.id, listName: list.name), // Pass the list id to the Matches page
+                              ),
+                            );
                           },
                         ),
                       );

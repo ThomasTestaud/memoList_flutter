@@ -48,8 +48,6 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Login Page'),
-            const SizedBox(height: 16),
             Form(
               child: Column(
                 children: [
@@ -78,9 +76,10 @@ class _LoginPageState extends State<LoginPage> {
                       return null;
                     },
                   ),
+                  const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: _submitForm,
-                    child: const Text('Submit'),
+                    child: const Text('login'),
                   ),
                 ],
               ),

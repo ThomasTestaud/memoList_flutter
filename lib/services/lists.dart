@@ -1,12 +1,11 @@
 import './api.dart';
-import 'dart:convert';
 
 class MyList {
-  int? id;
+  int id;
   String name;
   String description;
 
-  MyList({this.id, required this.name, required this.description});
+  MyList({required this.id, required this.name, required this.description});
 }
 
 class MyListFactory {
