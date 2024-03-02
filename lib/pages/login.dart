@@ -25,16 +25,49 @@ class _LoginPageState extends State<LoginPage> {
     try {
       var result = await api
           .post('/user/login', {'identifier': username, 'password': password});
-      print(result['token']);
       if (result['token'] is String) {
         Api.setToken(result['token']);
+
+        // Show a SnackBar for a correct login
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Successfully logged in! Welcome back!'),
+            backgroundColor:
+                Colors.green, // Optional: Set color to green for correct answers
+            duration:
+                Duration(seconds: 2), // Optional: Adjust the duration as needed
+          ),
+        );
+
         Navigator.pushReplacement(
           currentContext, // Use the captured context
           MaterialPageRoute(builder: (context) => ListsPage()),
         );
+      } else {
+        // Show a SnackBar for an incorrect login
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Server error. Try again!'),
+            backgroundColor:
+                Colors.red, // Optional: Set color to red for incorrect answers
+            duration:
+                Duration(seconds: 2), // Optional: Adjust the duration as needed
+          ),
+        );
       }
     } catch (error) {
-      print('Error: $error');
+      //print('Error: $error');
+
+      // Show a SnackBar for an error
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Incorrect login. Try again!'),
+          backgroundColor:
+              Colors.red, // Optional: Set color to red for incorrect answers
+          duration:
+              Duration(seconds: 2), // Optional: Adjust the duration as needed
+        ),
+      );
     }
   }
 
