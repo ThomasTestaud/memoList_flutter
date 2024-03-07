@@ -1,44 +1,50 @@
 import 'package:flutter/material.dart';
 import '../services/matches.dart';
+import '../services/lists.dart';
 import './matches.dart';
 
 class NewMatchPage extends StatefulWidget {
-  final int id;
-  final String listName;
+  final MyList list;
 
-  const NewMatchPage({Key? key, required this.id, required this.listName}) : super(key: key);
+  const NewMatchPage({Key? key, required this.list})
+      : super(key: key);
 
   @override
-  _NewMatchPageState createState() => _NewMatchPageState(id, listName);
+  _NewMatchPageState createState() => _NewMatchPageState(list);
 }
 
 class _NewMatchPageState extends State<NewMatchPage> {
   final _formKey = GlobalKey<FormState>();
-  final int id;
-  final String listName;
+  final MyList list;
   String _textToMatch = '';
   String _matchingText = '';
 
-  _NewMatchPageState(this.id, this.listName);
+  _NewMatchPageState(this.list);
 
   @override
   Widget build(BuildContext context) {
-    void create() {
-      Match newMatch = Match(textToMatch: _textToMatch, matchingText: _matchingText);
 
-      ServiceMatch.postMatch(newMatch, id);
-      
+    void create() async {
+      Match newMatch =
+          Match(textToMatch: _textToMatch, matchingText: _matchingText);
+
+      await ServiceMatch.postMatch(newMatch, list.id);
+
       Navigator.pop(context);
       Navigator.pop(context);
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => MatchesPage(id: id, listName: listName)),
+        MaterialPageRoute(
+            builder: (context) => MatchesPage(list: list)),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Match'),
+        title: Text('New Match',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+        backgroundColor:
+            Color.fromARGB(255, 255, 200, 0), // Match the vibrant yellow theme
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -47,12 +53,20 @@ class _NewMatchPageState extends State<NewMatchPage> {
           child: Column(
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Text to Match'),
-                maxLines: null, 
+                decoration: InputDecoration(
+                  labelText: 'Text to Match',
+                  labelStyle: TextStyle(
+                      color: Color.fromARGB(
+                          255, 157, 123, 0)), // Custom label color
+                  border: OutlineInputBorder(), // Adds border
+                  prefixIcon: Icon(Icons.text_fields,
+                      color: Color.fromARGB(255, 157, 123, 0)), // Add an icon
+                ),
+                maxLines: null,
                 keyboardType: TextInputType.multiline,
                 validator: (value) {
                   if (value?.isEmpty ?? true) {
-                    return 'Please enter a name';
+                    return 'Please enter text to match';
                   }
                   return null;
                 },
@@ -62,9 +76,18 @@ class _NewMatchPageState extends State<NewMatchPage> {
                   });
                 },
               ),
+              SizedBox(height: 16),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Matching text'),
-                maxLines: null, 
+                decoration: InputDecoration(
+                  labelText: 'Matching text',
+                  labelStyle: TextStyle(
+                      color: Color.fromARGB(
+                          255, 157, 123, 0)), // Custom label color
+                  border: OutlineInputBorder(), // Adds border
+                  prefixIcon: Icon(Icons.question_answer,
+                      color: Color.fromARGB(255, 157, 123, 0)), // Add an icon
+                ),
+                maxLines: null,
                 keyboardType: TextInputType.multiline,
                 onChanged: (value) {
                   setState(() {
@@ -72,14 +95,20 @@ class _NewMatchPageState extends State<NewMatchPage> {
                   });
                 },
               ),
-              SizedBox(height: 16.0),
+              SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
                     create();
                   }
                 },
-                child: Text('Submit'),
+                child: Text('Submit', style: TextStyle(fontSize: 18)),
+                style: ElevatedButton.styleFrom(
+                  primary: Color.fromARGB(
+                      255, 255, 200, 0), // Button color matching MemoList
+                  onPrimary: Colors.white, // Text color
+                  minimumSize: Size(double.infinity, 50), // Button size
+                ),
               ),
             ],
           ),

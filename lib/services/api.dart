@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiConfig {
-  static String url = 'http://localhost:3005';
+  //static String url = 'http://localhost:3005';
+  static String url = 'https://memolist-api.onrender.com';
   static String token = '';
 }
 

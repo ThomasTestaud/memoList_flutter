@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api.dart';
+import '../services/lists.dart';
 import './lists.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,6 +13,14 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  void _offlineMode() {
+    ServiceList.online = false;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => ListsPage()),
+    );
+  }
 
   void _submitForm() async {
     final username = _usernameController.text;
@@ -32,8 +41,8 @@ class _LoginPageState extends State<LoginPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Successfully logged in! Welcome back!'),
-            backgroundColor:
-                Colors.green, // Optional: Set color to green for correct answers
+            backgroundColor: Colors
+                .green, // Optional: Set color to green for correct answers
             duration:
                 Duration(seconds: 2), // Optional: Adjust the duration as needed
           ),
@@ -75,50 +84,81 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('MemoList',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 255, 200, 0),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Form(
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: _usernameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Username',
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Form(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _usernameController,
+                      decoration: InputDecoration(
+                        labelText: 'Username',
+                        prefixIcon: Icon(Icons.person), // Add an icon
+                        border:
+                            OutlineInputBorder(), // Adds border to the TextFormField
+                        labelStyle: TextStyle(
+                            color: Color.fromARGB(
+                                255, 157, 123, 0)), // Custom label color
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a username';
+                        }
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a username';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
+                    SizedBox(height: 16),
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        prefixIcon: Icon(Icons.lock), // Add an icon
+                        border:
+                            OutlineInputBorder(), // Adds border to the TextFormField
+                        labelStyle: TextStyle(
+                            color: Color.fromARGB(
+                                255, 157, 123, 0)), // Custom label color
+                      ),
+                      obscureText: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a password';
+                        }
+                        return null;
+                      },
                     ),
-                    obscureText: true,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a password';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _submitForm,
-                    child: const Text('login'),
-                  ),
-                ],
+                    SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: _submitForm,
+                      child: Text('Log In', style: TextStyle(fontSize: 18)),
+                      style: ElevatedButton.styleFrom(
+                        primary:
+                            Color.fromARGB(255, 255, 200, 0), // Button color
+                        onPrimary: Colors.white, // Text color
+                        minimumSize: Size(double.infinity, 50), // Button size
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    TextButton(
+                      onPressed: _offlineMode,
+                      child: Text('Offline mode', style: TextStyle(fontSize: 18)),
+                      style: TextButton.styleFrom(
+                        primary: Color.fromARGB(255, 255, 200, 0), // Text color
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-          ],
+            ],
+          ),
         ),
       ),
     );
