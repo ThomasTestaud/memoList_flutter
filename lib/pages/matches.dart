@@ -134,10 +134,17 @@ class _MatchesPageState extends State<MatchesPage> {
                                 right: 16.0,
                               )
                             : EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 16.0),
+                                vertical: 4.0, horizontal: 16.0),
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Row(
+                          child: 
+                          SizedBox(
+                                width:
+                                    35, // Adjust the width accordingly to fit the IconButton
+                                height:
+                                    35, // Adjust the height accordingly (optional)
+                                child:
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
@@ -167,7 +174,7 @@ class _MatchesPageState extends State<MatchesPage> {
                                   },
                                 ),
                             ],
-                          ),
+                          ),),
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
