@@ -15,6 +15,7 @@ class MatchesPage extends StatefulWidget {
 
 class _MatchesPageState extends State<MatchesPage> {
   bool showAnswer = false;
+  bool selection = false;
   List<Match> matches = [];
 
   @override
@@ -25,10 +26,41 @@ class _MatchesPageState extends State<MatchesPage> {
 
   void loadLists() async {
     var loadedLists = widget.list.matches;
-    // await ServiceMatch.getMatch(widget.id);
-    print(loadedLists);
     setState(() {
       matches = loadedLists;
+    });
+  }
+
+  void startTraining(MyList list) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => TrainingSessionPage(list: list)),
+    );
+  }
+
+  void selectMatch(Match match) {
+    setState(() {
+      if(ServiceMatch.matches.contains(match)) {
+        ServiceMatch.matches.remove(match);
+      } else {
+        ServiceMatch.matches.add(match);
+      }
+    });
+  }
+
+  bool isSelected(Match match) {
+    return ServiceMatch.matches.contains(match);
+  }
+
+  void activateSelection() {
+    setState(() {
+      if (selection) {
+        ServiceMatch.matches = widget.list.matches;
+      } else {
+        ServiceMatch.matches = [];
+      }
+      selection = !selection;
     });
   }
 
@@ -55,6 +87,14 @@ class _MatchesPageState extends State<MatchesPage> {
                     setState(() {
                       showAnswer = !showAnswer;
                     });
+                  },
+                ),
+                IconButton(icon: Icon(
+                  Icons.check_box,
+                  color: selection ? Colors.blue : Colors.grey,
+                ),
+                  onPressed: () {
+                    activateSelection();
                   },
                 ),
                 ServiceList.online ? IconButton(
@@ -114,6 +154,18 @@ class _MatchesPageState extends State<MatchesPage> {
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
+                              if (selection)
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.check_box,
+                                    color: isSelected(match)
+                                        ? Colors.blue
+                                        : Colors.grey,
+                                  ),
+                                  onPressed: () {
+                                    selectMatch(match);
+                                  },
+                                ),
                             ],
                           ),
                         ),
@@ -134,13 +186,7 @@ class _MatchesPageState extends State<MatchesPage> {
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => TrainingSessionPage(
-                        list: widget.list,
-                      )), // Use widget.id and widget.listName here
-            );
+            startTraining(widget.list);
           },
           child: const Padding(
               padding: EdgeInsets.all(12.0),

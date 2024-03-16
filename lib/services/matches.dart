@@ -49,13 +49,6 @@ class MatchFactory {
 
 class ServiceMatch {
   static List<Match> matches = [];
-/*
-  static Future<List<Match>> getMatch(int id) async {
-    var api = Api();
-    var response = await api.get('/list/' + id.toString());
-
-    return MatchFactory.buildListFromApi(response);
-  }*/
 
   static Future<void> postMatch(Match data, int id) async {
     var api = Api();

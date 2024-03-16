@@ -80,7 +80,7 @@ class _TrainingSessionPageState extends State<TrainingSessionPage> {
   }
   
   void loadLists() async {
-    var loadedLists = widget.list.matches;
+    var loadedLists = ServiceMatch.matches;
         //await ServiceMatch.getMatch(widget.id); // Use widget.id here
     setState(() {
       matches = loadedLists;
